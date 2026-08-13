@@ -37,11 +37,12 @@
   table.files{width:100%;border-collapse:collapse;table-layout:fixed}
   table.files th,table.files td{padding:11px 18px;font-size:13.5px;border-bottom:1px solid #f0f2f6;vertical-align:middle;text-align:left}
   /* Widths must total 100%: table-layout is fixed and .rblock clips overflow. */
-  table.files th:nth-child(1),table.files td:nth-child(1){width:46%}
-  table.files th.type-col,table.files td.type-col{width:10%;text-align:center}
+  table.files th:nth-child(1),table.files td:nth-child(1){width:36%}
+  table.files th.type-col,table.files td.type-col{width:20%;text-align:center}
   table.files th.ver-col,table.files td.ver-col{width:24%;text-align:center}
-  /* Wide enough that the button never outgrows the cell and eats its padding. */
-  table.files th.dl-col,table.files td.dl-col{width:20%;text-align:center;white-space:nowrap;padding-left:14px;padding-right:18px}
+  /* Right-aligned so the gap to the table edge is exactly padding-right,
+     independent of how wide this column ends up. */
+  table.files th.dl-col,table.files td.dl-col{width:20%;text-align:right;white-space:nowrap;padding-left:14px;padding-right:13px}
   table.files th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#fafbfc}
   table.files tr:last-child td{border-bottom:none}
   table.files .fname{font-weight:600}
@@ -151,13 +152,13 @@ const GENERAL_FILES = [
     name: "Annual Health Assessment",
     file: "forms/Annual_Health_Assessment.pdf",
     kind: "PDF",
-    version: "Current working copy (on site since August 7, 2026)"
+    version: "May 1, 2026"
   },
   {
     name: "Physical Examination Form",
     file: "forms/Physical_Examination_Form.pdf",
     kind: "PDF",
-    version: "Current working copy (on site since August 7, 2026)"
+    version: "May 1, 2026"
   }
 ];
 
@@ -224,6 +225,18 @@ const CREDENTIALING_CHECKLIST = [
 
 /* Newest first. Add new entries at the top. */
 const DOCUMENT_LOG = [
+  {
+    date: "August 13, 2026",
+    time: "10:10 AM EDT",
+    document: "Annual Health Assessment and Physical Examination Form (May 1, 2026)",
+    change: "Recorded a version date of May 1, 2026 for both general health forms. They previously had no version date on the Admin page — the column read “Current working copy (on site since August 7, 2026),” which described when the file was posted rather than the version of the form itself. Both forms now carry a version date in the same format as the specialty DOP and case-log files."
+  },
+  {
+    date: "August 13, 2026",
+    time: "10:10 AM EDT",
+    document: "Admin page (this page)",
+    change: "Adjusted the working-files table spacing: narrowed the document column from 46% to 36% and widened the type column from 10% to 20%, and reduced the gap between the Download button and the edge of the table to about a third of its previous width. The button is now right-aligned so that gap is set solely by the cell padding and stays the same at every screen width."
+  },
   {
     date: "August 13, 2026",
     time: "9:20 AM EDT",
