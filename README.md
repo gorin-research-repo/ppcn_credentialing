@@ -7,10 +7,16 @@ Static web guide for clinical privileging documentation at PeakPoint Central Nas
 | Path | Contents |
 |------|----------|
 | `index.html` | Interactive privileging guide |
+| `admin.html` | Document inventory, credentialing checklist, and change log |
+| `site-data.js` | Shared registry: filenames, version dates, privilege requirements |
+| `changelog.js` | Change log entries rendered by `admin.html` |
 | `assets/logo.png` | Brand logo |
 | `dops/` | Final Delineation of Privileges PDFs |
 | `case-logs/` | Case-log Excel templates |
 | `forms/` | Annual Health Assessment & Physical Examination forms |
+
+Both pages read their document list from `site-data.js`, so a filename or version
+date is recorded once and the guide and the admin inventory stay in agreement.
 
 ## Provider flow
 
@@ -19,6 +25,27 @@ Static web guide for clinical privileging documentation at PeakPoint Central Nas
 3. **Anesthesia Provider** → choose **Physician (MD or DO)** or **CRNA** (not a surgical specialty list)
 
 DOP forms open as linked PDFs from `dops/` (not embedded base64). Case-log templates link from `case-logs/` when available.
+
+## Posting a new or revised document
+
+Dropping a file into `dops/`, `case-logs/`, or `forms/` does not publish it — the
+guide links documents from the registry in `site-data.js`. All three steps are
+required:
+
+1. Add the file, keeping the version date in the filename (`Urology_May_6_2026_FINAL.pdf`).
+2. Point the registry at it in `site-data.js`: `DOP_FORM` for a privileges form,
+   `CASE_LOG` for a case-log template. For a privileges form, also update that
+   specialty's `version` in `DATA` to the new date.
+3. Add a `CHANGELOG` entry in `changelog.js` recording what changed and the
+   version dates it moved between. The field reference is in that file's header
+   comment.
+
+Open `admin.html` afterwards to confirm the document appears with the correct
+version date and no warnings. It flags any specialty missing a template, and any
+privileges form whose filename date disagrees with the version recorded in
+`DATA` — which is what a form replaced without a version bump looks like. Serve
+the folder over HTTP (see below) and use **Verify every file downloads** to
+confirm nothing is linked to a missing file.
 
 ## Preview locally
 

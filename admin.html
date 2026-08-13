@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Document Inventory &amp; Change Log — PeakPoint Central Nassau Surgery Center</title>
+<style>
+  :root{
+    /* Brand: green #268b6b, grey #495566 */
+    --green:#268b6b; --green-d:#1c6b52; --slate:#495566; --slate-l:#5a6678;
+    --ink:#1f2733; --muted:#6b7684; --line:#e2e7ee; --bg:#f4f6f9;
+    --card:#ffffff; --amber:#b7791f; --amber-bg:#fdf6e7; --blue-bg:#eef4fb;
+    --red:#b3261e; --red-bg:#fdecea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--green-d);text-decoration:none;border-bottom:1px solid rgba(38,139,107,.4)}
+  a:hover{border-bottom-color:var(--green-d)}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px 24px}
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .head-inner{max-width:900px;margin:0 auto;padding:28px 20px;display:flex;align-items:center;justify-content:center}
+  .logo{display:flex;align-items:center;justify-content:center}
+  .logo img{height:88px;width:auto;display:block}
+  @media(max-width:560px){.logo img{height:64px}}
+  h1{font-size:20px;margin:26px 0 4px;font-weight:700}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+  h2.sec{font-size:16px;margin:30px 0 4px;font-weight:700}
+  p.secsub{color:var(--muted);font-size:13px;margin:0 0 14px}
+
+  .nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+  .nav a{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 14px;
+    font-size:12.5px;font-weight:600;color:var(--slate);border-bottom-color:var(--line)}
+  .nav a:hover{border-color:var(--green);color:var(--green-d)}
+
+  .privacy{background:var(--blue-bg);border:1px solid #d4e2f2;border-radius:10px;padding:11px 14px;
+    font-size:12.5px;color:#33506f;margin:0 0 18px}
+
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+  .stat{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px}
+  .stat .n{font-size:22px;font-weight:700;line-height:1.2}
+  .stat .l{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:2px}
+
+  .checkbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:6px}
+  button.ghost{background:#fff;color:var(--slate);border:1px solid #cdd5e0;border-radius:9px;
+    padding:10px 18px;font-size:13.5px;font-weight:600;cursor:pointer}
+  button.ghost:hover{border-color:var(--slate-l)}
+  button.ghost:disabled{opacity:.55;cursor:not-allowed}
+  .checknote{font-size:12.5px;color:var(--muted)}
+
+  .alerts{margin-bottom:6px}
+  .alert{border-radius:9px;padding:10px 13px;font-size:12.5px;margin-bottom:8px;display:flex;gap:8px}
+  .alert.warn{background:var(--amber-bg);border:1px solid #f0e0b8;color:#7a5a12}
+  .alert.bad{background:var(--red-bg);border:1px solid #f3cdc9;color:#8a2019}
+  .alert.good{background:#edf7f2;border:1px solid #c9e5d9;color:#1c6b52}
+
+  .group{margin-bottom:16px}
+  .gh{background:var(--slate);color:#fff;border-radius:11px 11px 0 0;padding:11px 18px;
+    font-weight:700;font-size:14.5px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .gh .gc{background:rgba(255,255,255,.16);border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:600;flex:none}
+  .gbody{background:var(--card);border:1px solid var(--line);border-top:none;border-radius:0 0 11px 11px;padding:4px 0}
+
+  .spec{padding:13px 18px;border-bottom:1px solid #f0f2f6}
+  .spec:last-child{border-bottom:none}
+  .spec-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:9px;margin-bottom:9px}
+  .spec-h .sn{font-weight:700;font-size:14.5px}
+  .spec-h .sv{font-size:12px;color:var(--muted)}
+
+  table.docs-t{width:100%;border-collapse:collapse;font-size:13px}
+  table.docs-t th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);font-weight:700;padding:0 10px 5px 0;border-bottom:1px solid var(--line)}
+  table.docs-t td{padding:7px 10px 7px 0;vertical-align:top;border-bottom:1px solid #f5f7fa}
+  table.docs-t tr:last-child td{border-bottom:none}
+  table.docs-t td.k{white-space:nowrap;font-weight:600;color:var(--slate)}
+  table.docs-t td.v{white-space:nowrap;color:var(--muted)}
+  table.docs-t td.f{word-break:break-word}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+
+  .badge{display:inline-block;border-radius:6px;padding:2px 8px;font-size:10.5px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;margin-left:6px}
+  .badge.miss{background:var(--red-bg);color:var(--red)}
+  .badge.warn{background:var(--amber-bg);color:var(--amber)}
+  .badge.ok{background:#edf7f2;color:var(--green-d)}
+  .badge.chk{background:#eef1f5;color:var(--slate)}
+  .rowwarn{font-size:12px;color:var(--amber);margin-top:3px}
+  .rowmiss{font-size:12px;color:var(--red);margin-top:3px}
+
+  ul.docs{list-style:none;margin:0;padding:0}
+  ul.docs li{position:relative;padding:8px 0 8px 26px;font-size:13.5px;border-bottom:1px solid #f0f2f6}
+  ul.docs li:last-child{border-bottom:none}
+  ul.docs li:before{content:"";position:absolute;left:2px;top:11px;width:15px;height:15px;
+    border:2px solid var(--green);border-radius:4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:6px 18px}
+  .card.pad{padding:16px 18px}
+
+  .log{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+  .logentry{padding:15px 18px;border-bottom:1px solid var(--line)}
+  .logentry:last-child{border-bottom:none}
+  .logmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:6px}
+  .logwhen{font-size:12px;font-weight:700;color:var(--slate)}
+  .logtag{border-radius:6px;padding:2px 8px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .logtag.document{background:#edf7f2;color:var(--green-d)}
+  .logtag.site{background:var(--blue-bg);color:#33506f}
+  .logscope{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .logby{font-size:11.5px;color:var(--muted);margin-left:auto}
+  .logsum{font-weight:700;font-size:14px;margin-bottom:4px}
+  .logdet{font-size:13px;color:var(--slate-l)}
+  .logdocs{margin-top:9px;border-top:1px dashed var(--line);padding-top:8px}
+  .logdoc{font-size:12px;color:var(--muted);padding:2px 0}
+  .logdoc .act{font-weight:700;color:var(--slate);text-transform:uppercase;font-size:10.5px;letter-spacing:.04em}
+  .logdoc .ver{color:var(--green-d);font-weight:600}
+
+  .howto{background:#fff;border:1px dashed #cdd5e0;border-radius:10px;padding:14px 16px;font-size:12.5px;color:var(--muted)}
+  .howto b{color:var(--ink)}
+  .howto code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;
+    background:#f1f3f6;border-radius:4px;padding:1px 5px;color:var(--slate)}
+  .howto ol{margin:8px 0 0;padding-left:20px}
+  .howto li{margin-bottom:5px}
+
+  .site-footer{background:var(--card);border-top:1px solid var(--line)}
+  .site-footer .foot-inner{max-width:900px;margin:0 auto;padding:14px 20px;text-align:center;font-size:12.5px;color:var(--muted)}
+  .site-footer .handle{font-weight:600;color:var(--slate)}
+  .site-footer .foot-sep{margin:0 7px;color:#c3cbd6}
+  @media print{
+    body{background:#fff}
+    header,.nav,.checkbar,.privacy{display:none!important}
+    .group,.log,.card{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="head-inner">
+    <div class="logo">
+      <img src="assets/logo.png" alt="PeakPoint Central Nassau Surgery Center">
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Site Administration</h1>
+  <p class="sub">Every document the privileging guide serves, grouped by provider type and specialty, with the version date each one carries. Below the inventory: the basic credentialing checklist, and the log of document and site changes.</p>
+
+  <div class="nav">
+    <a href="index.html">← Back to the guide</a>
+    <a href="#inventory">Document inventory</a>
+    <a href="#general">General documents</a>
+    <a href="#checklist">Credentialing checklist</a>
+    <a href="#log">Change log</a>
+  </div>
+
+  <p class="privacy">This page is linked from the site footer and is not password protected — anyone with the address can open it. It holds only the document inventory and version history. No patient or applicant information appears here.</p>
+
+  <div id="stats" class="stats"></div>
+  <div id="alerts" class="alerts"></div>
+  <div class="checkbar">
+    <button class="ghost" id="checkbtn">Verify every file downloads</button>
+    <span class="checknote" id="checknote"></span>
+  </div>
+
+  <h2 class="sec" id="inventory">Document inventory</h2>
+  <p class="secsub">Delineation of Privileges forms and case-log templates, by provider type and specialty. Click a filename to download it.</p>
+  <div id="inv"></div>
+
+  <h2 class="sec" id="general">General documents</h2>
+  <p class="secsub">Required of every applicant, whatever the provider type or specialty.</p>
+  <div id="gen"></div>
+
+  <h2 class="sec">Other site files</h2>
+  <p class="secsub">Supporting files that are not applicant documents.</p>
+  <div id="other"></div>
+
+  <h2 class="sec" id="checklist">Basic credentialing checklist</h2>
+  <p class="secsub">What a new application requires, as the guide presents it. The Delineation of Privileges form and case log are specialty-specific — see the inventory above for the current version of each.</p>
+  <div id="chk" class="card"></div>
+
+  <h2 class="sec" id="log">Change log</h2>
+  <p class="secsub">Every document change, in reverse chronological order. Add an entry whenever a document is posted, replaced, renamed, or has its version date bumped.</p>
+  <div id="log" class="log"></div>
+
+  <div class="howto" style="margin-top:14px">
+    <b>Adding an entry.</b> The log lives in <code>changelog.js</code>, alongside <code>index.html</code>. Each entry is one record at the top of the <code>CHANGELOG</code> list; the file's opening comment documents every field.
+    <ol>
+      <li>Put the new or revised document in <code>dops/</code>, <code>case-logs/</code>, or <code>forms/</code>. Keep the version date in the filename, as in <code>Urology_May_6_2026_FINAL.pdf</code>.</li>
+      <li>Point the site at it in <code>site-data.js</code> — <code>DOP_FORM</code> for a privileges form, <code>CASE_LOG</code> for a case-log template — and update that specialty's <code>version</code> in <code>DATA</code> to the new date. Uploading a file alone does not publish it.</li>
+      <li>Add the change log entry: when, who, what changed, and the version date it moved from and to.</li>
+      <li>Reload this page and confirm the new document appears with the right version date and no warnings, then use <b>Verify every file downloads</b> to confirm the link resolves.</li>
+    </ol>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="foot-inner">
+    Tool by <span class="handle">@michael_gorin</span> / <span class="handle">@AugmentedMD</span>
+    <span class="foot-sep">·</span>
+    <a href="index.html">Privileging guide</a>
+  </div>
+</footer>
+
+<script src="site-data.js"></script>
+<script src="changelog.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+/* Documents carry their version date in the filename (Urology_May_6_2026_FINAL.pdf).
+   Reading it back means a newly posted file shows its own date without anyone
+   having to record it twice. */
+function dateFromFilename(file){
+  if(!file) return null;
+  const names=MONTHS.map(m=>m+"|"+m.slice(0,3)).join("|");
+  const m=file.match(new RegExp("(?:^|[_ -])("+names+")[_ -](\\d{1,2})[_ -](\\d{4})","i"));
+  if(!m) return null;
+  const abbr=m[1].slice(0,3).toLowerCase();
+  const mi=MONTHS.findIndex(x=>x.slice(0,3).toLowerCase()===abbr);
+  if(mi<0) return null;
+  return {display:MONTHS[mi]+" "+Number(m[2])+", "+m[3], key:m[3]+"-"+String(mi+1).padStart(2,"0")+"-"+String(Number(m[2])).padStart(2,"0")};
+}
+
+/* "August 4, 2026" -> "2026-08-04", for comparing a recorded version against a filename. */
+function keyFromVersion(v){
+  if(!v) return null;
+  const m=String(v).match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+  if(!m) return null;
+  const abbr=m[1].slice(0,3).toLowerCase();
+  const mi=MONTHS.findIndex(x=>x.slice(0,3).toLowerCase()===abbr);
+  if(mi<0) return null;
+  return m[3]+"-"+String(mi+1).padStart(2,"0")+"-"+String(Number(m[2])).padStart(2,"0");
+}
+
+/* Flatten the shared registry into the rows this page renders. */
+function inventory(){
+  return Object.keys(PROVIDERS).map(pkey=>{
+    const p=PROVIDERS[pkey];
+    const keys = p.step2==="none" ? [p.fixedSpec] : p.specialties;
+    return {
+      key:pkey,
+      label:p.label,
+      specs:keys.filter(k=>DATA[k]).map(k=>({
+        key:k,
+        label:DATA[k].label,
+        version:DATA[k].version,
+        blocks:(DATA[k].blocks||[]).length,
+        dop:DOP_FORM[k]||null,
+        clog:CASE_LOG[k]||null
+      }))
+    };
+  });
+}
+
+const INV=inventory();
+const problems=[];   /* things a maintainer should fix */
+const allFiles=[];   /* every path this page links, for the download check */
+
+function track(path){ if(path && allFiles.indexOf(path)<0) allFiles.push(path); return path; }
+
+function fileCell(base,file,kind,spec){
+  if(!file){
+    problems.push({level:"miss", text:"No "+kind+" is posted for "+spec+"."});
+    return '<span class="mono" style="color:var(--red)">none posted</span><span class="badge miss">missing</span>'+
+      '<div class="rowmiss">The guide falls back to generic wording here; providers get no template to download.</div>';
+  }
+  const path=track(base+file);
+  return '<a class="mono" href="'+encodeURI(path)+'" target="_blank" rel="noopener" data-path="'+esc(path)+'">'+esc(file)+'</a>'+
+    '<span class="chkslot" data-for="'+esc(path)+'"></span>';
+}
+
+function versionCell(recorded,file,spec,kind){
+  const fromFile=dateFromFilename(file);
+  if(!recorded && !fromFile) return '<span style="color:var(--muted)">no version date</span>';
+  if(!recorded) return esc(fromFile.display);
+  const rk=keyFromVersion(recorded);
+  if(fromFile && rk && fromFile.key!==rk){
+    problems.push({level:"warn", text:"The "+spec+" "+kind+" is dated "+fromFile.display+" in its filename, but the guide records version "+recorded+". One of the two is stale."});
+    return esc(recorded)+'<span class="badge warn">check</span>'+
+      '<div class="rowwarn">Filename says '+esc(fromFile.display)+'.</div>';
+  }
+  return esc(recorded);
+}
+
+function renderInventory(){
+  $("inv").innerHTML = INV.map(g=>{
+    const rows=g.specs.map(s=>{
+      const clogDate=dateFromFilename(s.clog);
+      return '<div class="spec">'+
+        '<div class="spec-h"><span class="sn">'+esc(s.label)+'</span>'+
+          '<span class="sv">'+s.blocks+' privilege block'+(s.blocks===1?'':'s')+'</span></div>'+
+        '<table class="docs-t">'+
+          '<tr><th style="width:210px">Document</th><th style="width:130px">Version</th><th>File</th></tr>'+
+          '<tr><td class="k">Delineation of Privileges</td>'+
+            '<td class="v">'+versionCell(s.version,s.dop,s.label,"privileges form")+'</td>'+
+            '<td class="f">'+fileCell(DOP_BASE,s.dop,"Delineation of Privileges form",s.label)+'</td></tr>'+
+          '<tr><td class="k">Case-log template</td>'+
+            '<td class="v">'+(clogDate?esc(clogDate.display):'<span style="color:var(--muted)">—</span>')+'</td>'+
+            '<td class="f">'+fileCell(CASE_LOG_BASE,s.clog,"case-log template",s.label)+'</td></tr>'+
+        '</table></div>';
+    }).join("");
+    const unit = g.key==="surgeon" ? "specialties" : (g.specs.length===1?"document set":"provider categories");
+    return '<div class="group"><div class="gh"><span>'+esc(g.label)+'</span>'+
+      '<span class="gc">'+g.specs.length+' '+unit+'</span></div>'+
+      '<div class="gbody">'+rows+'</div></div>';
+  }).join("");
+}
+
+function renderGeneral(){
+  $("gen").innerHTML='<div class="group"><div class="gh"><span>All providers</span>'+
+    '<span class="gc">'+GENERAL_FORMS.length+' forms</span></div><div class="gbody"><div class="spec">'+
+    '<table class="docs-t">'+
+    '<tr><th style="width:210px">Document</th><th style="width:130px">Version</th><th>File</th></tr>'+
+    GENERAL_FORMS.map(f=>{
+      const d=dateFromFilename(f.file);
+      return '<tr><td class="k">'+esc(f.label)+'<div style="font-weight:400;font-size:11.5px;color:var(--muted);white-space:normal;max-width:200px">'+esc(f.note)+'</div></td>'+
+        '<td class="v">'+(d?esc(d.display):'<span style="color:var(--muted)">no version date</span>')+'</td>'+
+        '<td class="f">'+fileCell(FORMS_BASE,f.file,"form","all providers")+'</td></tr>';
+    }).join("")+
+    '</table></div></div></div>';
+}
+
+function renderOther(){
+  const logo="assets/logo.png";
+  track(logo);
+  $("other").innerHTML='<div class="card pad"><table class="docs-t">'+
+    '<tr><th style="width:210px">File</th><th style="width:130px">Purpose</th><th>Path</th></tr>'+
+    '<tr><td class="k">Brand logo</td><td class="v">Page header</td>'+
+      '<td class="f"><a class="mono" href="'+logo+'" target="_blank" rel="noopener">'+logo+'</a>'+
+      '<span class="chkslot" data-for="'+logo+'"></span></td></tr>'+
+    '<tr><td class="k">Shared data</td><td class="v">Document registry</td>'+
+      '<td class="f"><span class="mono">site-data.js</span>'+
+      '<div style="font-size:11.5px;color:var(--muted)">Filenames, version dates, and privilege requirements read by both the guide and this page.</div></td></tr>'+
+    '<tr><td class="k">Change log</td><td class="v">Version history</td>'+
+      '<td class="f"><span class="mono">changelog.js</span>'+
+      '<div style="font-size:11.5px;color:var(--muted)">The entries shown at the bottom of this page.</div></td></tr>'+
+    '</table></div>';
+}
+
+function renderChecklist(){
+  /* Called with no specialty, so the DOP and case-log entries render as plain
+     text rather than links to one specialty's files. Same list the guide shows. */
+  $("chk").innerHTML='<ul class="docs">'+basicCredentialingItems().map(t=>'<li>'+t+'</li>').join("")+'</ul>';
+}
+
+function renderStats(){
+  const dops=new Set(), clogs=new Set();
+  INV.forEach(g=>g.specs.forEach(s=>{ if(s.dop)dops.add(s.dop); if(s.clog)clogs.add(s.clog); }));
+  const total=dops.size+clogs.size+GENERAL_FORMS.length;
+  const specs=INV.reduce((n,g)=>n+g.specs.length,0);
+  const stats=[
+    {n:total, l:"Documents posted"},
+    {n:dops.size, l:"Privileges forms"},
+    {n:clogs.size, l:"Case-log templates"},
+    {n:specs, l:"Specialties &amp; provider types"}
+  ];
+  $("stats").innerHTML=stats.map(s=>'<div class="stat"><div class="n">'+s.n+'</div><div class="l">'+s.l+'</div></div>').join("");
+}
+
+function renderAlerts(){
+  const el=$("alerts");
+  if(!problems.length){
+    el.innerHTML='<div class="alert good"><span>✔</span><div>Every specialty has both a privileges form and a case-log template, and each recorded version date matches the date in its filename.</div></div>';
+    return;
+  }
+  el.innerHTML=problems.map(p=>'<div class="alert '+(p.level==="miss"?"bad":"warn")+'"><span>'+(p.level==="miss"?"✕":"⚠️")+'</span><div>'+esc(p.text)+'</div></div>').join("");
+}
+
+const fmtDate=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",month:"long",day:"numeric",year:"numeric"});
+const fmtTime=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",hour:"numeric",minute:"2-digit",timeZoneName:"short"});
+
+function renderLog(){
+  const entries=(typeof CHANGELOG!=="undefined"?CHANGELOG:[]).slice()
+    .sort((a,b)=>new Date(b.at)-new Date(a.at));
+  if(!entries.length){ $("log").innerHTML='<div class="logentry logdet">No entries yet.</div>'; return; }
+  $("log").innerHTML=entries.map(e=>{
+    const d=new Date(e.at);
+    const when=isNaN(d)?esc(e.at):fmtDate.format(d)+" · "+fmtTime.format(d);
+    const docs=(e.docs||[]).map(x=>{
+      const ver = x.to ? (x.from ? esc(x.from)+" → "+esc(x.to) : "version "+esc(x.to)) : "";
+      return '<div class="logdoc"><span class="act">'+esc(x.action||"changed")+'</span> '+
+        '<span class="mono">'+esc(x.path)+'</span>'+(ver?' — <span class="ver">'+ver+'</span>':'')+'</div>';
+    }).join("");
+    return '<div class="logentry">'+
+      '<div class="logmeta">'+
+        '<span class="logwhen">'+when+'</span>'+
+        '<span class="logtag '+(e.kind==="document"?"document":"site")+'">'+(e.kind==="document"?"Document":"Site")+'</span>'+
+        '<span class="logscope">'+esc(e.scope||"")+'</span>'+
+        '<span class="logby">'+esc(e.by||"")+(e.ref?" · "+esc(e.ref):"")+'</span>'+
+      '</div>'+
+      '<div class="logsum">'+esc(e.summary||"")+'</div>'+
+      '<div class="logdet">'+esc(e.detail||"")+'</div>'+
+      (docs?'<div class="logdocs">'+docs+'</div>':'')+
+    '</div>';
+  }).join("");
+}
+
+/* Confirms each linked file actually downloads. Guards against a document being
+   renamed or removed in the folder while the registry still points at the old name. */
+function setupCheck(){
+  const btn=$("checkbtn"), note=$("checknote");
+  if(location.protocol==="file:"){
+    btn.disabled=true;
+    note.textContent="Available when the site is served over http — a local file:// copy blocks the requests.";
+    return;
+  }
+  note.textContent=allFiles.length+" linked files.";
+  btn.addEventListener("click",async()=>{
+    btn.disabled=true;
+    const slots={};
+    document.querySelectorAll(".chkslot").forEach(s=>{ slots[s.getAttribute("data-for")]=s; });
+    allFiles.forEach(p=>{ if(slots[p]) slots[p].innerHTML='<span class="badge chk">checking</span>'; });
+    let ok=0, bad=[];
+    for(const path of allFiles){
+      let good=false, label="failed";
+      try{
+        const r=await fetch(encodeURI(path),{method:"HEAD"});
+        good=r.ok; label=good?"ok":String(r.status);
+      }catch(err){ label="unreachable"; }
+      if(good) ok++; else bad.push(path);
+      if(slots[path]) slots[path].innerHTML='<span class="badge '+(good?"ok":"miss")+'">'+esc(label)+'</span>';
+      note.textContent="Checked "+(ok+bad.length)+" of "+allFiles.length+"…";
+    }
+    note.textContent = bad.length
+      ? ok+" of "+allFiles.length+" downloaded. Failed: "+bad.join(", ")
+      : "All "+allFiles.length+" files downloaded successfully.";
+    btn.disabled=false;
+  });
+}
+
+renderInventory();
+renderGeneral();
+renderOther();
+renderChecklist();
+renderStats();
+renderAlerts();
+renderLog();
+setupCheck();
+</script>
+</body>
+</html>
