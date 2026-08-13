@@ -58,11 +58,17 @@
   table.log .when .tz{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
   table.log .doc{font-weight:600}
   .site-footer{background:var(--card);border-top:1px solid var(--line)}
-  .site-footer .foot-inner{max-width:900px;margin:0 auto;padding:14px 20px;text-align:center;font-size:12.5px;color:var(--muted)}
+  .site-footer .foot-inner{position:relative;max-width:900px;margin:0 auto;padding:14px 20px;font-size:12.5px;color:var(--muted)}
+  .site-footer .foot-credit{text-align:center;line-height:1.4}
+  .site-footer .foot-admin{position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap}
   .site-footer .handle{font-weight:600;color:var(--slate)}
   .site-footer .foot-sep{margin:0 8px;color:#c5ccd6}
   .site-footer a.foot-link{color:var(--slate);font-weight:600;border-bottom-color:rgba(73,85,102,.35)}
   .site-footer a.foot-link:hover{color:var(--green-d);border-bottom-color:var(--green-d)}
+  @media(max-width:520px){
+    .site-footer .foot-inner{padding-bottom:34px}
+    .site-footer .foot-admin{top:auto;bottom:10px;transform:none}
+  }
   @media(max-width:640px){
     table.files th:nth-child(2),table.files td:nth-child(2){display:none}
     table.log .when{white-space:normal}
@@ -122,11 +128,8 @@
 
 <footer class="site-footer">
   <div class="foot-inner">
-    <a class="foot-link" href="index.html">Privileging Guide</a>
-    <span class="foot-sep">·</span>
-    Tool by <span class="handle">@michael_gorin</span> / <span class="handle">@AugmentedMD</span>
-    <span class="foot-sep">·</span>
-    Admin
+    <span class="foot-credit">Tool by <span class="handle">@michael_gorin</span> / <span class="handle">@AugmentedMD</span></span>
+    <span class="foot-admin"><a class="foot-link" href="index.html">Privileging Guide</a></span>
   </div>
 </footer>
 
