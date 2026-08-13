@@ -36,10 +36,12 @@
   .rbody{padding:4px 0}
   table.files{width:100%;border-collapse:collapse;table-layout:fixed}
   table.files th,table.files td{padding:11px 18px;font-size:13.5px;border-bottom:1px solid #f0f2f6;vertical-align:middle;text-align:left}
-  table.files th:nth-child(1),table.files td:nth-child(1){width:40%}
+  /* Widths must total 100%: table-layout is fixed and .rblock clips overflow. */
+  table.files th:nth-child(1),table.files td:nth-child(1){width:46%}
   table.files th.type-col,table.files td.type-col{width:10%;text-align:center}
-  table.files th.ver-col,table.files td.ver-col{width:40%;text-align:center}
-  table.files th.dl-col,table.files td.dl-col{width:12%;min-width:220px;text-align:right;white-space:nowrap;padding-left:8px;padding-right:120px;box-sizing:border-box}
+  table.files th.ver-col,table.files td.ver-col{width:24%;text-align:center}
+  /* Wide enough that the button never outgrows the cell and eats its padding. */
+  table.files th.dl-col,table.files td.dl-col{width:20%;text-align:center;white-space:nowrap;padding-left:14px;padding-right:18px}
   table.files th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#fafbfc}
   table.files tr:last-child td{border-bottom:none}
   table.files .fname{font-weight:600}
@@ -69,9 +71,10 @@
   .site-footer a.foot-link:hover{color:var(--green-d);border-bottom-color:var(--green-d)}
   @media(max-width:640px){
     table.files th.type-col,table.files td.type-col{display:none}
-    table.files th:nth-child(1),table.files td:nth-child(1){width:50%}
-    table.files th.ver-col,table.files td.ver-col{width:30%}
-    table.files th.dl-col,table.files td.dl-col{width:20%;padding-right:70px}
+    table.files th:nth-child(1),table.files td:nth-child(1){width:44%}
+    table.files th.ver-col,table.files td.ver-col{width:26%}
+    table.files th.dl-col,table.files td.dl-col{width:30%;padding-left:10px;padding-right:12px}
+    a.dl{min-width:86px;padding:6px 10px}
     table.log .when{white-space:normal}
   }
   @media print{
@@ -221,6 +224,12 @@ const CREDENTIALING_CHECKLIST = [
 
 /* Newest first. Add new entries at the top. */
 const DOCUMENT_LOG = [
+  {
+    date: "August 13, 2026",
+    time: "9:20 AM EDT",
+    document: "Admin page (this page)",
+    change: "Fixed the working-files table layout. The download column carried a 220px minimum width, which forced each table wider than its card; because the card hides overflow, the column’s right padding was cut off and the Download buttons sat flush against the card edge — earlier padding increases (28px, then 70px, then 120px) were clipped away and had no visible effect. Removed the minimum width, set the column widths to total 100% (document 46%, type 10%, version date 24%, download 20%), and centered the buttons with ordinary padding, so every Download button now has consistent clearance from the table edge at all screen widths. The wider document column also keeps long case-log filenames on a single line."
+  },
   {
     date: "August 13, 2026",
     time: "7:30 AM EDT",
