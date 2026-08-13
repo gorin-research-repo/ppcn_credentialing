@@ -34,14 +34,18 @@
   .rblock>.rh{background:var(--green);color:#fff;padding:12px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:10px}
   .rh .rtag{background:rgba(255,255,255,.2);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;flex:none}
   .rbody{padding:4px 0}
-  table.files{width:100%;border-collapse:collapse}
+  table.files{width:100%;border-collapse:collapse;table-layout:fixed}
   table.files th,table.files td{text-align:left;padding:11px 18px;font-size:13.5px;border-bottom:1px solid #f0f2f6;vertical-align:middle}
+  table.files th:nth-child(1),table.files td:nth-child(1){width:34%}
+  table.files th:nth-child(2),table.files td:nth-child(2){width:11%}
+  table.files th:nth-child(3),table.files td:nth-child(3){width:42%}
+  table.files th.dl-col,table.files td.dl-col{width:13%;text-align:right;white-space:nowrap;padding-right:18px}
   table.files th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#fafbfc}
   table.files tr:last-child td{border-bottom:none}
   table.files .fname{font-weight:600}
   table.files .fname .fn{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px;word-break:break-all}
   .kind{display:inline-block;background:#eef4fb;color:var(--slate);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:700;letter-spacing:.03em}
-  a.dl{display:inline-block;background:var(--green);color:#fff;border-radius:7px;padding:6px 12px;font-size:12.5px;font-weight:700;border-bottom:none}
+  a.dl{display:inline-block;min-width:92px;text-align:center;background:var(--green);color:#fff;border-radius:7px;padding:6px 12px;font-size:12.5px;font-weight:700;border-bottom:none;box-sizing:border-box}
   a.dl:hover{background:var(--green-d);border-bottom:none;color:#fff}
   ul.docs{list-style:none;margin:0;padding:12px 18px 16px}
   ul.docs li{position:relative;padding:8px 0 8px 26px;font-size:14px;border-bottom:1px solid #f0f2f6}
@@ -65,6 +69,9 @@
   .site-footer a.foot-link:hover{color:var(--green-d);border-bottom-color:var(--green-d)}
   @media(max-width:640px){
     table.files th:nth-child(2),table.files td:nth-child(2){display:none}
+    table.files th:nth-child(1),table.files td:nth-child(1){width:42%}
+    table.files th:nth-child(3),table.files td:nth-child(3){width:38%}
+    table.files th.dl-col,table.files td.dl-col{width:20%}
     table.log .when{white-space:normal}
   }
   @media print{
@@ -272,7 +279,7 @@ function fileRow(item){
     '<td class="fname">'+item.name+'<span class="fn">'+fileName(item.file)+'</span></td>'+
     '<td><span class="kind">'+item.kind+'</span></td>'+
     '<td>'+item.version+'</td>'+
-    '<td>'+downloadCell(item.file)+'</td>'+
+    '<td class="dl-col">'+downloadCell(item.file)+'</td>'+
     '</tr>';
 }
 
@@ -285,7 +292,7 @@ function specRows(spec){
 }
 
 function tableHead(){
-  return '<table class="files"><thead><tr><th>Document</th><th>Type</th><th>Version date</th><th></th></tr></thead><tbody>';
+  return '<table class="files"><thead><tr><th>Document</th><th>Type</th><th>Version date</th><th class="dl-col"></th></tr></thead><tbody>';
 }
 
 function renderFiles(){
