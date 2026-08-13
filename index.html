@@ -81,6 +81,9 @@
   .site-footer{background:var(--card);border-top:1px solid var(--line)}
   .site-footer .foot-inner{max-width:900px;margin:0 auto;padding:14px 20px;text-align:center;font-size:12.5px;color:var(--muted)}
   .site-footer .handle{font-weight:600;color:var(--slate)}
+  .site-footer .foot-sep{margin:0 8px;color:#c5ccd6}
+  .site-footer a.foot-link{color:var(--slate);font-weight:600;border-bottom-color:rgba(73,85,102,.35)}
+  .site-footer a.foot-link:hover{color:var(--green-d);border-bottom-color:var(--green-d)}
   @media print{
     body{background:#fff}
     header,.step,.disclaimer,.actions,#printbtn{display:none!important}
@@ -156,11 +159,15 @@
 <footer class="site-footer">
   <div class="foot-inner">
     Tool by <span class="handle">@michael_gorin</span> / <span class="handle">@AugmentedMD</span>
+    <span class="foot-sep">·</span>
+    <a class="foot-link" href="admin.html">Admin</a>
   </div>
 </footer>
 
 <script>
-/* External files: DOPs in dops/, case logs in case-logs/, forms in forms/, logo in assets/. */
+/* External files: DOPs in dops/, case logs in case-logs/, forms in forms/, logo in assets/.
+   When a document filename or version date changes, update the matching entry on admin.html
+   and add a dated entry to the Document Change Log there. */
 const DOP_BASE = "dops/";
 const CASE_LOG_BASE = "case-logs/";
 const FORMS_BASE = "forms/";
