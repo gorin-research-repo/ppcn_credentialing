@@ -514,18 +514,17 @@ const DATA = {
   anesthesia_physician:{
     label:"Anesthesiology — Physician (MD or DO)", version:"September 21, 2026",
     blocks:[
-      {name:"Anesthesiology — Core Privileges (Patients 2 years and older)", type:"clinical", core:true, unit:"anesthesia encounters",
+      {name:"Anesthesiology — Patients 2 months of age and older", type:"clinical", core:true, unit:"anesthesia encounters",
         edu:"ACGME- or AOA-accredited residency in anesthesiology.",
         cert:"Certification (or board-eligible, within 5 yrs) in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current ACLS (American Heart Association); AND/OR current PeRLS (American Society of Anesthesiology). MOC required unless legacy.",
-        special:"The DOP lists age bands within core privileges: patients 2 to 12 years of age, adolescent patients (13 to 17 years of age), and adult patients (18 years of age and older).",
         trainAlt:"Completion of an ACGME-/AOA-accredited residency or fellowship within the past 12 months.",
         newMin:{n:50,m:12}, renMin:{n:150,m:36}},
-      {name:"Pediatric Anesthesiology (Patients 2 months to 2 years)", type:"clinical", unit:"anesthesia encounters in patients 2 months to 2 years",
-        edu:"ACGME-/AOA-accredited residency in anesthesiology AND an ACGME-/AOA-accredited fellowship in pediatric anesthesiology.",
-        cert:"Anesthesiology certification (ABA or AOBA) AND pediatric anesthesiology certification (ABA or AOBA), each current or board-eligible within 5 yrs; AND current PALS (AHA); AND current ACLS (AHA); AND/OR current PeRLS (ASA). MOC required unless legacy.",
-        special:"These additional requirements apply only to patients 2 months to 2 years of age. A pediatric anesthesiology fellowship and current PALS are required for this age group. Core privileges cover patients 2 years of age and older.",
+      {name:"Anesthesiology — Patients of any age", type:"clinical", unit:"anesthesia encounters",
+        edu:"Applicant must meet the criteria for anesthesiology privileges.",
+        cert:"Current certification (or board-eligible, within 5 yrs) in Pediatric Anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current PALS (AHA).",
+        special:"This privilege is listed on the same Anesthesiology grid. Additional certification is required under the “patients of any age” line: pediatric anesthesiology certification and current PALS.",
         trainAlt:"Completion of fellowship training in pediatric anesthesiology within the past 12 months.",
-        newMin:{n:50,m:12}, renMin:{n:150,m:36}, prereq:"core anesthesiology privileges"}
+        newMin:{n:50,m:12}, renMin:{n:150,m:36}, prereq:"anesthesiology privileges"}
     ]
   },
   anesthesia_crna:{
