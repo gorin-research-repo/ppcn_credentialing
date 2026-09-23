@@ -524,10 +524,10 @@ const DATA = {
         edu:"ACGME- or AOA-accredited residency in anesthesiology.",
         cert:"Current certification or board eligible, with certification within 5 years of completing formal training, in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current ACLS (American Heart Association); AND/OR current PeRLS (American Society of Anesthesiology). Maintenance of Certification is required unless legacy.",
         extras:[
-          "Additional requirement for patients 2 months to less than 24 months: successful completion of an ACGME- or AOA-accredited fellowship in pediatric anesthesiology.",
-          "Additional requirement for patients 2 months to less than 24 months: current certification in Pediatric Advanced Life Support (PALS) by the American Heart Association."
+          "Successful completion of an ACGME- or AOA-accredited fellowship in pediatric anesthesiology.",
+          "Current certification in Pediatric Advanced Life Support (PALS) by the American Heart Association."
         ],
-        descExtra:"Additional requirements: pediatric anesthesiology fellowship and current PALS.",
+        descExtra:"Pediatric anesthesiology fellowship and current PALS.",
         trainAlt:"Successful completion of an ACGME- or AOA-accredited residency, or fellowship training, within the past 12 months.",
         newMin:{n:50,m:12}, renMin:{n:150,m:36}},
       {name:"Provide anesthesia care to patients 2 years to less than 13 years of age", type:"clinical",
@@ -536,9 +536,9 @@ const DATA = {
         edu:"ACGME- or AOA-accredited residency in anesthesiology.",
         cert:"Current certification or board eligible, with certification within 5 years of completing formal training, in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current ACLS (American Heart Association); AND/OR current PeRLS (American Society of Anesthesiology). Maintenance of Certification is required unless legacy.",
         extras:[
-          "Additional requirement for patients 2 years to less than 13 years: current certification in Pediatric Advanced Life Support (PALS) by the American Heart Association."
+          "Current certification in Pediatric Advanced Life Support (PALS) by the American Heart Association."
         ],
-        descExtra:"Additional requirement: current PALS.",
+        descExtra:"Current PALS.",
         trainAlt:"Successful completion of an ACGME- or AOA-accredited residency, or fellowship training, within the past 12 months.",
         newMin:{n:50,m:12}, renMin:{n:150,m:36}},
       {name:"Provide anesthesia care to patients 13 years of age and older", type:"clinical",
@@ -686,10 +686,9 @@ function blockDesc(b){
   if(b.type==="course") return "Course-based privilege — no case log";
   if(b.volumeKey){
     const extra = b.descExtra || "";
-    let vol;
-    if(state.cred==="recred") vol = "One shared case log of "+b.renMin.n+" "+b.unit+" in "+b.renMin.m+" months covers every age band selected.";
-    else if(state.cred==="new" && state.trained==="yes") vol = "Recent training meets the shared case-log minimum.";
-    else vol = "One shared case log of "+b.newMin.n+" "+b.unit+" in "+b.newMin.m+" months covers every age band selected.";
+    const vol = (state.cred==="new" && state.trained==="yes")
+      ? "No case log required (recent training)."
+      : "Complete case log.";
     return extra ? extra+" "+vol : vol;
   }
   if(state.cred==="recred") return "Renewal: log of "+b.renMin.n+" case"+(b.renMin.n===1?"":"s")+" in "+b.renMin.m+" months";
@@ -871,54 +870,34 @@ function requirementsFor(b){
   return {docs,tag:"New credentialing"};
 }
 
-function renderSharedCaseLog(chosen){
-  const grouped = chosen.filter(b=>b.volumeKey);
-  if(!grouped.length) return "";
-  const sample = grouped[0];
+function renderPhysicianBox(chosen){
+  const base = chosen[0];
   const recred = state.cred==="recred";
   const trainedYes = !recred && state.trained==="yes";
+  const dop = DOP_FORM[state.spec];
   const clog = CASE_LOG[state.spec];
-  const clogText = clog
-    ? assetLink(CASE_LOG_BASE, clog, DATA[state.spec].label+" case-log template")
-    : "case log reflecting the privileges requested";
-  const bands = grouped.map(b=>b.ageScope);
-  const items = [];
+  const docs = [];
+  docs.push("Signed and completed "+assetLink(DOP_BASE, dop, DATA[state.spec].label+" Delineation of Privileges Form")+".");
+  docs.push("Privileges requested: "+chosen.map(b=>b.ageScope).join("; ")+".");
+  docs.push("Education & training: "+base.edu);
+  if(base.cert) docs.push("Board certification: "+base.cert);
+  const seen = new Set();
+  chosen.forEach(b=>{
+    (b.extras||[]).forEach(line=>{
+      if(/^Age-specific additional requirements: none/.test(line)) return;
+      if(seen.has(line)) return;
+      seen.add(line);
+      docs.push(line);
+    });
+  });
   if(trainedYes){
-    items.push("Training alternate (physician DOP, New Privilege): successful completion of an ACGME- or AOA-accredited residency, or fellowship training, within the past 12 months. That completion satisfies the case-log minimum. Submit the certificate of completion; a case log is not required.");
-    items.push("The age-band additional requirements listed with each selected privilege remain in effect, including pediatric anesthesiology fellowship and current PALS where those privileges require them.");
-  }else if(recred){
-    items.push("Shared case log: at least "+sample.renMin.n+" "+sample.unit+" within the past "+sample.renMin.m+" months, reflective of the scope of privileges requested ("+clogText+"). Submit one log. The encounters together must reflect every age band selected on this application.");
+    docs.push("Certificate of completion of an ACGME- or AOA-accredited residency or fellowship within the past 12 months. No case log required.");
   }else{
-    items.push("Shared case log: at least "+sample.newMin.n+" "+sample.unit+" within the past "+sample.newMin.m+" months, reflective of the scope of privileges requested ("+clogText+"). Submit one log. The encounters together must reflect every age band selected on this application.");
-  }
-  items.push("Age bands selected on this application: "+bands.join("; ")+".");
-  if(!trainedYes){
-    items.push("Use the September 23, 2026 template. Record every case on the single Cases sheet (Case ID, date of anesthetic, patient age, patient sex, type of anesthetic, surgical procedure, and facility).");
-  }
-  if(grouped.some(b=>b.ageId==="under24mo") && !trainedYes){
-    items.push("For patients 2 months to less than 24 months, record age in months so the log shows the patient was at least 2 months old and under 24 months. Patients younger than 2 months are outside this privilege.");
+    docs.push(clog ? "Complete case log ("+assetLink(CASE_LOG_BASE, clog, "case-log template")+")." : "Complete case log.");
   }
   const tag = trainedYes ? "New · via training" : (recred ? "Recredentialing" : "New credentialing");
-  return '<div class="rblock"><div class="rh"><span>Case log — physician anesthesia</span><span class="rtag">'+tag+'</span></div><div class="rbody">'+
-    '<p class="sec-t">One log for all selected age bands</p><ul class="docs">'+
-    items.map(t=>'<li>'+t+'</li>').join("")+'</ul></div></div>';
-}
-
-function renderAnesthesiaActivities(chosen){
-  if(state.spec!=="anesthesia_physician" || !chosen.length) return "";
-  const lines = [
-    "Preoperative evaluation, including medical history, physical examination, risk assessment, and perioperative planning.",
-    "Supervision of Certified Registered Nurse Anesthetists (CRNAs).",
-    "Administration of monitored anesthesia care, general, neuraxial, and regional anesthesia, including intravenous medications, volatile agents, spinal, epidural, and peripheral nerve blocks, alone or in combination.",
-    "Monitoring and maintenance of acceptable physiologic parameters during the perioperative period, including optimization of neurologic, cardiac, respiratory, hematologic, and renal function.",
-    "Invasive monitoring, including arterial and central venous access.",
-    "Use of ultrasound and echocardiography, including point-of-care ultrasound, for regional anesthesia, cardiac and respiratory assessment, and abdominal examination, as clinically indicated."
-  ];
-  return '<div class="rblock"><div class="rh"><span>Anesthesia activities listed on the DOP</span><span class="rtag">Same form</span></div><div class="rbody">'+
-    '<p class="sec-t">Check these on the delineation form with the age privileges above</p>'+
-    '<ul class="docs">'+lines.map(t=>'<li>'+t+'</li>').join("")+'</ul>'+
-    '<p class="hint">These activity lines are part of the September 23, 2026 physician DOP. They follow the age privileges and do not add a separate case-log minimum or an age-specific certificate.</p>'+
-    '</div></div>';
+  return '<div class="rblock"><div class="rh"><span>'+esc(DATA[state.spec].label)+'</span><span class="rtag">'+tag+'</span></div><div class="rbody"><ul class="docs">'+
+    docs.map(t=>'<li>'+t+'</li>').join("")+'</ul></div></div>';
 }
 
 $("genbtn").addEventListener("click",()=>{
@@ -963,16 +942,17 @@ $("genbtn").addEventListener("click",()=>{
   /* Basic application checklist appears first for new credentialing only. */
   html += renderBasicCredentialingBlock();
 
-  chosen.forEach(b=>{
-    const r=requirementsFor(b);
-    html+='<div class="rblock"><div class="rh"><span>'+esc(b.name)+'</span><span class="rtag">'+r.tag+'</span></div><div class="rbody">';
-    html+='<p class="sec-t">Privilege-specific documentation</p><ul class="docs">'+
-      r.docs.map(d=>'<li>'+d.t+'</li>').join("")+'</ul>';
-    html+='</div></div>';
-  });
-
-  html += renderSharedCaseLog(chosen);
-  html += renderAnesthesiaActivities(chosen);
+  if(chosen.every(b=>b.volumeKey)){
+    html += renderPhysicianBox(chosen);
+  }else{
+    chosen.forEach(b=>{
+      const r=requirementsFor(b);
+      html+='<div class="rblock"><div class="rh"><span>'+esc(b.name)+'</span><span class="rtag">'+r.tag+'</span></div><div class="rbody">';
+      html+='<p class="sec-t">Privilege-specific documentation</p><ul class="docs">'+
+        r.docs.map(d=>'<li>'+d.t+'</li>').join("")+'</ul>';
+      html+='</div></div>';
+    });
+  }
 
   if(anyClinicalNonCore&&!coreChosen){
     html+='<div class="note">⚠️<div><b>Core privileges required.</b> One or more selected blocks are add-ons that require the specialty’s core privileges to be held or requested at the same time. Add the core block, or confirm core privileges are already granted.</div></div>';
