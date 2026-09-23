@@ -248,6 +248,14 @@ function paCourseBlock(name,key){
   };
 }
 
+const ANESTHESIA_PHYSICIAN_CERT = [
+  "Board certification: Current certification in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology.",
+  "OR board eligible, with certification within 5 years of completing formal training, in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology.",
+  "AND current ACLS (American Heart Association).",
+  "AND/OR current PeRLS (American Society of Anesthesiology).",
+  "Maintenance of Certification is required unless legacy."
+];
+
 const DATA = {
   podiatry:{
     label:"Podiatry", version:"April 30, 2026",
@@ -522,7 +530,7 @@ const DATA = {
         ageId:"under24mo", ageScope:"patients 2 months to less than 24 months of age",
         unit:"anesthesia encounters", volumeKey:"anes_md",
         edu:"ACGME- or AOA-accredited residency in anesthesiology.",
-        cert:"Current certification or board eligible, with certification within 5 years of completing formal training, in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current ACLS (American Heart Association); AND/OR current PeRLS (American Society of Anesthesiology). Maintenance of Certification is required unless legacy.",
+        certLines:ANESTHESIA_PHYSICIAN_CERT,
         extras:[
           "Successful completion of an ACGME- or AOA-accredited fellowship in pediatric anesthesiology.",
           "Current certification in Pediatric Advanced Life Support (PALS) by the American Heart Association."
@@ -534,7 +542,7 @@ const DATA = {
         ageId:"twoToTwelve", ageScope:"patients 2 years to less than 13 years of age",
         unit:"anesthesia encounters", volumeKey:"anes_md",
         edu:"ACGME- or AOA-accredited residency in anesthesiology.",
-        cert:"Current certification or board eligible, with certification within 5 years of completing formal training, in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current ACLS (American Heart Association); AND/OR current PeRLS (American Society of Anesthesiology). Maintenance of Certification is required unless legacy.",
+        certLines:ANESTHESIA_PHYSICIAN_CERT,
         extras:[
           "Current certification in Pediatric Advanced Life Support (PALS) by the American Heart Association."
         ],
@@ -545,7 +553,7 @@ const DATA = {
         ageId:"thirteenPlus", ageScope:"patients 13 years of age and older",
         unit:"anesthesia encounters", volumeKey:"anes_md",
         edu:"ACGME- or AOA-accredited residency in anesthesiology.",
-        cert:"Current certification or board eligible, with certification within 5 years of completing formal training, in anesthesiology by the American Board of Anesthesiology or the American Osteopathic Board of Anesthesiology; AND current ACLS (American Heart Association); AND/OR current PeRLS (American Society of Anesthesiology). Maintenance of Certification is required unless legacy.",
+        certLines:ANESTHESIA_PHYSICIAN_CERT,
         extras:[
           "Age-specific additional requirements: none. Patients 13 years of age and older are covered by the anesthesiology qualifications above."
         ],
@@ -880,7 +888,7 @@ function renderPhysicianBox(chosen){
   docs.push("Signed and completed "+assetLink(DOP_BASE, dop, DATA[state.spec].label+" Delineation of Privileges Form")+".");
   docs.push("Privileges requested: "+chosen.map(b=>b.ageScope).join("; ")+".");
   docs.push("Education & training: "+base.edu);
-  if(base.cert) docs.push("Board certification: "+base.cert);
+  (base.certLines || (base.cert ? ["Board certification: "+base.cert] : [])).forEach(line=>docs.push(line));
   const seen = new Set();
   chosen.forEach(b=>{
     (b.extras||[]).forEach(line=>{
