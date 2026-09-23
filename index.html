@@ -870,38 +870,34 @@ function requirementsFor(b){
   return {docs,tag:"New credentialing"};
 }
 
-function renderSharedCaseLog(chosen){
-  const grouped = chosen.filter(b=>b.volumeKey);
-  if(!grouped.length) return "";
+function renderPhysicianBox(chosen){
+  const base = chosen[0];
   const recred = state.cred==="recred";
   const trainedYes = !recred && state.trained==="yes";
+  const dop = DOP_FORM[state.spec];
   const clog = CASE_LOG[state.spec];
-  const items = [];
+  const docs = [];
+  docs.push("Signed and completed "+assetLink(DOP_BASE, dop, DATA[state.spec].label+" Delineation of Privileges Form")+".");
+  docs.push("Privileges requested: "+chosen.map(b=>b.ageScope).join("; ")+".");
+  docs.push("Education & training: "+base.edu);
+  if(base.cert) docs.push("Board certification: "+base.cert);
+  const seen = new Set();
+  chosen.forEach(b=>{
+    (b.extras||[]).forEach(line=>{
+      if(/^Age-specific additional requirements: none/.test(line)) return;
+      if(seen.has(line)) return;
+      seen.add(line);
+      docs.push(line);
+    });
+  });
   if(trainedYes){
-    items.push("Certificate of completion of an ACGME- or AOA-accredited residency or fellowship within the past 12 months. No case log required.");
+    docs.push("Certificate of completion of an ACGME- or AOA-accredited residency or fellowship within the past 12 months. No case log required.");
   }else{
-    items.push(clog ? "Complete case log ("+assetLink(CASE_LOG_BASE, clog, "case-log template")+")." : "Complete case log.");
+    docs.push(clog ? "Complete case log ("+assetLink(CASE_LOG_BASE, clog, "case-log template")+")." : "Complete case log.");
   }
   const tag = trainedYes ? "New · via training" : (recred ? "Recredentialing" : "New credentialing");
-  return '<div class="rblock"><div class="rh"><span>Case log</span><span class="rtag">'+tag+'</span></div><div class="rbody">'+
-    '<ul class="docs">'+items.map(t=>'<li>'+t+'</li>').join("")+'</ul></div></div>';
-}
-
-function renderAnesthesiaActivities(chosen){
-  if(state.spec!=="anesthesia_physician" || !chosen.length) return "";
-  const lines = [
-    "Preoperative evaluation, including medical history, physical examination, risk assessment, and perioperative planning.",
-    "Supervision of Certified Registered Nurse Anesthetists (CRNAs).",
-    "Administration of monitored anesthesia care, general, neuraxial, and regional anesthesia, including intravenous medications, volatile agents, spinal, epidural, and peripheral nerve blocks, alone or in combination.",
-    "Monitoring and maintenance of acceptable physiologic parameters during the perioperative period, including optimization of neurologic, cardiac, respiratory, hematologic, and renal function.",
-    "Invasive monitoring, including arterial and central venous access.",
-    "Use of ultrasound and echocardiography, including point-of-care ultrasound, for regional anesthesia, cardiac and respiratory assessment, and abdominal examination, as clinically indicated."
-  ];
-  return '<div class="rblock"><div class="rh"><span>Anesthesia activities listed on the DOP</span><span class="rtag">Same form</span></div><div class="rbody">'+
-    '<p class="sec-t">Check these on the delineation form with the age privileges above</p>'+
-    '<ul class="docs">'+lines.map(t=>'<li>'+t+'</li>').join("")+'</ul>'+
-    '<p class="hint">These activity lines are part of the September 23, 2026 physician DOP. They follow the age privileges and do not add a separate case-log minimum or an age-specific certificate.</p>'+
-    '</div></div>';
+  return '<div class="rblock"><div class="rh"><span>'+esc(DATA[state.spec].label)+'</span><span class="rtag">'+tag+'</span></div><div class="rbody"><ul class="docs">'+
+    docs.map(t=>'<li>'+t+'</li>').join("")+'</ul></div></div>';
 }
 
 $("genbtn").addEventListener("click",()=>{
@@ -946,16 +942,17 @@ $("genbtn").addEventListener("click",()=>{
   /* Basic application checklist appears first for new credentialing only. */
   html += renderBasicCredentialingBlock();
 
-  chosen.forEach(b=>{
-    const r=requirementsFor(b);
-    html+='<div class="rblock"><div class="rh"><span>'+esc(b.name)+'</span><span class="rtag">'+r.tag+'</span></div><div class="rbody">';
-    html+='<p class="sec-t">Privilege-specific documentation</p><ul class="docs">'+
-      r.docs.map(d=>'<li>'+d.t+'</li>').join("")+'</ul>';
-    html+='</div></div>';
-  });
-
-  html += renderSharedCaseLog(chosen);
-  html += renderAnesthesiaActivities(chosen);
+  if(chosen.every(b=>b.volumeKey)){
+    html += renderPhysicianBox(chosen);
+  }else{
+    chosen.forEach(b=>{
+      const r=requirementsFor(b);
+      html+='<div class="rblock"><div class="rh"><span>'+esc(b.name)+'</span><span class="rtag">'+r.tag+'</span></div><div class="rbody">';
+      html+='<p class="sec-t">Privilege-specific documentation</p><ul class="docs">'+
+        r.docs.map(d=>'<li>'+d.t+'</li>').join("")+'</ul>';
+      html+='</div></div>';
+    });
+  }
 
   if(anyClinicalNonCore&&!coreChosen){
     html+='<div class="note">⚠️<div><b>Core privileges required.</b> One or more selected blocks are add-ons that require the specialty’s core privileges to be held or requested at the same time. Add the core block, or confirm core privileges are already granted.</div></div>';
